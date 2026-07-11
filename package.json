@@ -2,7 +2,7 @@
   "name": "even-notifications",
   "author": "Ryan Diaz <ryan@ryanadiaz.com> (https://www.ryanadiaz.com)",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "description": "Draw a simulated notification popup overlay on Even Realities G2 smart glasses apps.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 # even-notifications
 
-Draw a notification popup overlay on top of an Even Realities G2 smart glasses app (Even Hub SDK), then automatically restore the app's original screen.
+Draw a simulated notification popup overlay on top of an Even Realities G2 smart glasses app (Even Hub SDK), then automatically restore the app's original screen.
 
 Consume it from another Even Hub app via a local dependency.
 
@@ -59,8 +59,8 @@ const notification = showNotification(bridge, currentPage, {
 
 ## Available templates
 
-- `incoming-call` — phone icon, title, caller name, timestamp. Source design: `Dashboard-notification-popup.png`.
-- `incoming-email` — mail icon (top-left, aligned with the heading), sender/subject line, wrapped body preview, timestamp. Source design: `Gmail-notification-popup-highres.png`.
+- `incoming-call` — phone icon, title, caller name, timestamp.
+- `incoming-email` — mail icon (top-left, aligned with the heading), sender/subject line, wrapped body preview, timestamp.
 
 ## How it works
 
@@ -68,19 +68,3 @@ const notification = showNotification(bridge, currentPage, {
 - Showing a notification merges **N+1 containers** on top of your app's existing ones: one image container per tile, plus one invisible `TextContainerProperty` sized to the whole assembled popup (image containers can't hold `isEventCapture`, so this is what catches the dismiss double-click). Container IDs are auto-allocated above whatever IDs your app already uses, so there's no need to reserve IDs up front.
 - Your app's container budget (12 total / 8 text / 4 image, shared with the popup) must have room for the popup's tiles + 1 text container while a notification is showing. `showNotification`/`evenNotification` throw a descriptive error if the merge would exceed those limits.
 - `updateImageRawData` calls are sent serially (one tile at a time, awaited) per the SDK's requirement that these calls not run concurrently.
-
-## Adding a new template
-
-1. Design the popup (any layout/size), export as a PNG matching the source-asset convention: monochrome green foreground, alpha channel encoding brightness, transparent background (see `Dashboard-notification-popup.png` or `Gmail-notification-popup-highres.png` for reference). A quick way to produce this without an external image editor: draw it on an HTML `<canvas>` in a browser (text + shapes, no external images so the canvas doesn't taint), export via `canvas.toDataURL('image/png')`, then convert opaque RGB → green+alpha using green-channel-as-luminance.
-2. Run the generator, passing the assembled width/height you want (it will split into tiles automatically, and will never upscale a source smaller than requested):
-   ```bash
-   npm run generate:template -- <name> <path-to-source.png> [targetWidth] [targetHeight]
-   ```
-   Defaults to targeting 560×120 if omitted. This box-downsamples the source (preserving thin lines/small text better than nearest-neighbor), quantizes it to the SDK's 4-bit greyscale format, splits it into a tile grid (erroring if the requested size would need more than 4 tiles), and writes `src/templates/<name>.ts`.
-3. Add the new entry to the `templates` map in `src/templates/index.ts` and extend the `NotificationTemplate` union in `src/types.ts`.
-4. `npm run build`.
-
-## Scripts
-
-- `npm run build` — type-check and compile `src/` to `dist/`.
-- `npm run generate:template -- <name> <sourcePng> [targetWidth] [targetHeight]` — dev-only asset generator (not shipped in `dist/`).
