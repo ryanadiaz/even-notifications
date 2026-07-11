@@ -1,0 +1,31 @@
+{
+  "name": "even-notifications",
+  "author": "Ryan Diaz <ryan@ryanadiaz.com> (https://www.ryanadiaz.com)",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Draw a simulated notification popup overlay on Even Realities G2 smart glasses apps.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "generate:template": "node scripts/generate-template-asset.mjs"
+  },
+  "peerDependencies": {
+    "@evenrealities/even_hub_sdk": ">=0.0.10"
+  },
+  "devDependencies": {
+    "@evenrealities/even_hub_sdk": "^0.0.11",
+    "typescript": "~5.4.0",
+    "upng-js": "^2.1.0"
+  }
+}
