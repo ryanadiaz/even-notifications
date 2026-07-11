@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build",
     "generate:template": "node scripts/generate-template-asset.mjs"
   },
   "peerDependencies": {
